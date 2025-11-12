@@ -1,0 +1,665 @@
+Comment,Sentiment,Annotator
+"this is the config file set up:
+
+```
+~/.config/goose/
+├── config.yaml              # Provider, model, extensions, general settings
+├── permission.yaml          # Tool permission levels (user-configured)
+├── secrets.yaml             # Secrets (when keyring is disabled)
+└── permissions/             # Runtime permission decisions (auto-managed)
+    └── tool_permissions.json
+ ```",Neutral,William
+I'd drop the context,Neutral,William
+"@alexhancock Thank you for the suggestion! I also got around to use cherry-pick at one point, but I didn't understand the flow and used it incorrectly at the time. Your provided steps made me understand the flow clearly, and I learnt something new! Thank you for the guide too!",Positive,William
+"hmm, yeah
+
+so I wanted to have a test that tests the actual scheduler. but I don't want to do anything. I experimented with various test only code, but that got my warnings of not used code, so if you have a better suggestion",Neutral,William
+"so we have to remove it from three or four places but each might fail, do we want to not abort on the first fail?",Neutral,William
+Done,Positive,William
+does this work in basecamp2?,Neutral,William
+"> fwiw this is all gone in basecamp2
+
+👍",Positive,William
+@dianed-square great catch thank you! just updated those feature docs and a couple more places I found while testing,Positive,William
+"> Oh, wow, nice catch. I did not know we didn't have this in openai
+
+Thanks! Yeah, we have a really unreliable api provider and I always wondered why goose didnt auto retry on a 429 or similar, finally decided to look. Glad it was an easy fix. 
+
+",Positive,William
+addressed in latest commit: https://github.com/block/goose/pull/5516/commits/4fbb701a9eb54abf3d91d7f330c91d9df2eb4c32,Neutral,William
+Thanks for letting us know. No worries,Positive,William
+"@ramazansancar I cherry-picked your commit from https://github.com/block/goose/pull/5369 into this Pull Request to get it passing CI. It seems like there was an intermittent issue on your other branch, so this corrects it and we can merge. Thanks!",Positive,William
+.bundle,Neutral,William
+"Working nicely for me!
+
+```
+🐚 10:44:23 ~/Development/goose main $ ./target/debug/goose run --output-format json -t ""hello""
+starting session | provider: databricks model: databricks-claude-sonnet-4-5
+    session id: 20251104_12
+    working directory: /Users/alexhancock/Development/goose
+{
+  ""messages"": [
+    {
+      ""id"": null,
+      ""role"": ""user"",
+      ""created"": 1762271082,
+      ""content"": [
+        {
+          ""type"": ""text"",
+          ""text"": ""hello""
+        }
+      ],
+      ""metadata"": {
+        ""userVisible"": true,
+        ""agentVisible"": true
+      }
+    },
+    {
+      ""id"": ""msg_bdrk_01GxCtrw1WHBM2oMXss8m9AF"",
+      ""role"": ""assistant"",
+      ""created"": 1762271084,
+      ""content"": [
+        {
+          ""type"": ""text"",
+          ""text"": ""Hello! 👋 \n\nI'm **goose**, an AI agent created by Block. I'm here to help you with a wide range of tasks, from coding and development work to answering questions and solving problems.\n\nI have access to several tools and capabilities:\n- **Code analysis and editing** - I can view, edit, and analyze code files\n- **Shell commands** - I can run commands in your terminal\n- **Chat recall** - I can search through our past conversations\n- **Extension management** - I can discover and enable additional extensions for specialized tasks\n\nSince I can see you're in the `/Users/alexhancock/Development/goose` directory, I'm ready to help with the goose project itself if needed, or anything else you'd like to work on!\n\nWhat would you like to do today?""
+        }
+      ],
+      ""metadata"": {
+        ""userVisible"": true,
+        ""agentVisible"": true
+      }
+    }
+  ],
+  ""metadata"": {
+    ""total_tokens"": 7066,
+    ""status"": ""completed""
+  }
+}
+```",Positive,William
+"we're looking only for one tool, list_tools will actually go and call all mcp servers to ask for their tools - that could be rather expensive! now that I say that, I worry that we are doing this willy-nilly anyway
+
+still though, I think we should move this code to the place where we actually get the toolrequests, in categorize_tools - which I see already has a list of tools (unused!)",Neutral,William
+"Hi @blackgirlbytes and @alexhancock , my apologies, I had to close this Pull Request because I got confused ammending signoffs from my previous failing commits on this Pull Request. I made a new Pull Request following the DCO guide that Goose provided, and it seemed to work for my commits. Although I do see that I somehow pulled another person's commit into my branch, and I saw that there were many files that were affected (I only contributed like 4-5 lines on the community-content.json), yet the Github trackers showed that I made over 900 lines of code changes. I don't know how to fix that, and I hope it didn't affect anything. I would love to learn more about how I could later avoid this issue for other projects if possible! Thank you for your patience in merging and helping me through this.",Positive,William
+I'm leaving it in as this was a cause of errors. it should all be rational now,Neutral,William
+"I appreciate all the work here! But I am not sure adding functionality like this to goose's command line tool feels right. 
+It's a lot of overhead for goose to have six commands related to this added, and we also don't want to maintain a comprehensive db management layer in goose I don't think.
+
+I made a small change recently to show the user the location of the `sessions.db` via the `goose info` command, and then I think for someone who wants to manually manage the db, they could just use https://sqlite.org/cli.html
+
+What do you think?",Neutral,William
+"that would be overkill.
+
+- The recipe_id comes from recipe.title - which is from the web registry, not user input
+- We're replacing the dangerous characters (/, \, .) with underscores
+- The temp directory path is controlled - we use std::env::temp_dir() which is safe
+- Even if someone crafted a malicious title, the sanitization would neutralize it",Neutral,William
+Would claude-4-sonnet or claude-4-5-sonnet work? Would rather not downgrade the model too much.,Neutral,William
+"thanks, co-pilot! or delete the comment",Positive,William
+(rebased this because I want to see if the provider tests are more reliable after recent merges),Neutral,William
+use the format_server_error_message here,Neutral,William
+"Interested to know, but doesn't seem like a big deal to me as we wouldn't expect the builtins to time out conceptually",Neutral,William
+Getting a clippy error in `goose-mcp/src/computercontroller/mod.rs:1119` (unrelated to my changes). Should I fix it here or skip?,Neutral,William
+YES!,Neutral,William
+Thanks @alexhancock,Positive,William
+should comments that cover the asserts,Neutral,Igor Nathan
+"I would only remove dirs here - that's what we expect and if there are files, maybe somebody put them there for a reason? i.e. copied a log file out of the sub folder for save keeping? also not sure about logging inside of a logger",Negative,Igor Nathan
+"hmm, does this impact sub-recipes? in that case we might want to rethink this, because that is a valid use case",Negative,Igor Nathan
+"what is the effect of the switch to have no timeout vs the prior
+
+```
+Some(goose::config::DEFAULT_EXTENSION_TIMEOUT)
+```
+?",Negative,Igor Nathan
+@katzdave this should fix the log: #5621,Neutral,Igor Nathan
+"I don't like that we overload i to mean session and schedule-id. 
+
+I'd be biased towards just not having a short for this (but I also don't use the scheduler on CLI at all). ",Negative,Igor Nathan
+"@alexhancock are you sure it isn't a regression, as it was I thought reliably working. The aim of these is to catch drift in Goose so fi it adds something that breaks popular models then we have a regression. 
+
+(I think this is https://openrouter.ai/qwen/qwen3-coder model?) - if it doesn't work for this, we have regressed something in goose. ",Negative,Igor Nathan
+"```suggestion
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+```",Neutral,Igor Nathan
+nice!,Positive,Igor Nathan
+"json doesn't have a distinction between integers and floats, so this is all a bit of a no-op
+
+we should consider to do the same for booleans maybe?",Negative,Igor Nathan
+"Please relate this issue to #5474 , and please be sure not to take on any other assigned issues. Thank you!",Neutral,Igor Nathan
+"Does Tetrate have `claude-haiku-4-5`?
+
+Edit: `claude-haiku-4-5` this should be correct despite the suggestions. Copilot probably out of sync.",Neutral,Igor Nathan
+shouldn't status_code by of ype StatusCode here?,Neutral,Igor Nathan
+"thanks @jamadeo - what are you saying is all true. but I want to get this in, so I am mostly going to leave it for another time. if that :) ",,Igor Nathan
+"great idea, I kept `w` but readded `p` as an alias for backwards compatibility",Positive,Igor Nathan
+will do,Positive,Igor Nathan
+"we're not really
+
+* we're still sending the entire conversation over, but only pick up the last message
+* we keep track of all_messages here separately but only for telemetry. this is somewhat misguided, I think it is measuring the wrong thing and it should happen in agent.reply, not here, but this Pull Request is big enough as is",Negative,Igor Nathan
+"this works for me: 
+<img width=""413"" height=""127"" alt=""image"" src=""https://github.com/user-attachments/assets/129a31f0-c228-4f52-876e-39839348101d"" />
+",Positive,Igor Nathan
+Actually this one has merge conflicts with 20 files changed @vietbui1999ru,Negative,Igor Nathan
+@katzdave The failure was actually unrelated to the model here. I think this should be more reliable. If it proves not to be once in main + everyone's PRs we can revisit.,Neutral,Igor Nathan
+goose says it's unnecessarily prescriptive,Negative,Igor Nathan
+I don't think you want to do this in a mutable way - just make it functional,Neutral,Igor Nathan
+"Sure, whatever you prefer. However for a free provider and initial experience I would go with fast and cheap. It’s not a downgrade as the model before did not work :) ",Positive,Igor Nathan
+"Hi @blackgirlbytes and @alexhancock , thank you for the reviews and suggestions. I'll update the blog post in a moment! ",Positive,Igor Nathan
+"What are these three sources of token counts and do we need them all? tokenState, sessionOutputTokens, localOutputTokens",Neutral,Igor Nathan
+"ignoring. The recipe_id in recipe.rs is just passed to fetch_and_store_subrecipes(), which immediately sanitizes it ",Neutral,Igor Nathan
+thank you @vietbui1999ru !,Positive,Igor Nathan
+"yeah, I don't think this needs a warning at all",Positive,Igor Nathan
+"My bad.. I wasn't following any particular standard.. I'm a bit new to goose and rust. Seemed like a simple fix. I play around with json and flags stuff from time to time.. Anyway, I'll refactor this to serialize the the complete `Message` objects (including all `MessageContent` variants like `ToolRequest`/`ToolResponse`) directly in the messages array, rather than splitting them. 
+Just to clarify should the JSON output serialize the messages as-is using the existing serde derives on `Message` and `MessageContent`, or would you prefer a flattened/simplified format for the JSON output specifically?",Neutral,Joao Vitor
+thanks!,Positive,Joao Vitor
+"Serialization cost is minimal compared to LLM API calls, and it's already gated behind `is_langfuse_enabled()`",Neutral,Joao Vitor
+~Blocker: #5604~,Neutral,Joao Vitor
+"Were you adhering to anything that has become a standard for representing agent exchanges in json form?
+
+Given that goose models `ToolRequest` and `ToolResponse` as message content, I think it should reflect these in the list of messages, not as separate lists.
+
+https://github.com/block/goose/blob/37e1bb1d37a638f850a1c96ea01cf653ecd5009b/crates/goose/src/conversation/message.rs#L134-L135
+
+Does that make sense?",Neutral,Joao Vitor
+"I am unable to use my recipe / sub-recipe setup since 1.10.x as the whole session management is not working. It wont create the necessary sessions, and it will not run without session. If sub-recipes would run without sessions my issue would be solved . I had them all setup with no-session. In general i think if you have a lot of sub-recipe/sub-agent runs, like in my case, the occasional hickup is not important if the overall success rate is still good. I have been adding additional logging to persist the errors i got so i can follow up, not needing the session details. Possibly others do similarly, when relying on subagents and sub recipes.",Negative,Joao Vitor
+"i understand that the individual toasts have more info on the error, but I did find it confusing to see the extension status in both the grouped toasts and the individual toast",Negative,Joao Vitor
+should we call this one set_config_provider and the other set_agent_provider for easier reading?,Neutral,Joao Vitor
+"Thanks @wpfleger96! Would you also be able to update the feature docs that reference the changed flags? Specifically:
+- guides/recipes/session-recipes.md): --id → --schedule-id
+- troubleshooting/diagnostics-and-reporting.md: --id → --session-id
+
+It would be better to show the new canonical flag names even though the old flags still work via aliases.",Positive,Joao Vitor
+"> Right now hints are included in the prompt for recipes. I think it makes sense for recipes to be as consistent as possible in any dir, so this change removes hints.
+> 
+> Anything we should consider here?
+
+I agree. The recipe is built from the context in the current session, not from project knowledge in the current dir",Neutral,Joao Vitor
+delete this test please,Neutral,Joao Vitor
+"I made this change in the GitHub UI, is the DCO check an issue?",Neutral,Joao Vitor
+thanks for your contribution! please be sure to [sign the DCO](https://github.com/block/goose/pull/5525/checks?check_run_id=54305171562),Positive,Joao Vitor
+Hi @blackgirlbytes here's the new Pull Request I made. Sorry for the inconvenience. It should be ok now!,Positive,Joao Vitor
+"Yes it’s one of the supported ones, in my free account i see for Anthropic:
+
+<img width=""834"" height=""1210"" alt=""image"" src=""https://github.com/user-attachments/assets/5c2b54cd-055b-4fb0-b961-2322343fcf72"" />
+",Neutral,Joao Vitor
+"> thanks for your contribution! please be sure to [sign the DCO](https://github.com/block/goose/pull/5525/checks?check_run_id=54305171562)
+
+Thank you for reviewing and pointing this out.",Positive,Joao Vitor
+"#5601 has been merged. going to close this out now, but feel free to reopen if there is still something missing @michaelneale ",Positive,Joao Vitor
+hmmm,Neutral,Joao Vitor
+"Copilot hallucinated this, at least `short_alias` is working for me locally",,Joao Vitor
+Thanks for this one!,Positive,Joao Vitor
+"TokenState could derive Default (if it doesn't already) and this could be TokenState::default()
+
+then this could alaso be `get_session(session_id).await.map( .. ).unwrap_or_default()`",Neutral,Joao Vitor
+@sheikhlimon yeah those resolutions seem fine,Positive,Joao Vitor
+is there a test to catch this?,Neutral,Joao Vitor
+Alt: Move this content to new topic (in Security section?) except the Developer extension tools table,Neutral,Joao Vitor
+"The legacy `#[tracing::instrument]` decorators declared the fields (input_tokens, output_tokens, total_tokens) but never called `.record()` to populate them. I tried properly introducing them in this Pull Request, but was taking much longer so I decided to leave it for later",Negative,Joao Vitor
+"eh, then I need to add `.as_u16()` inside the function. but guess that's negligible. will fix...",Neutral,Joao Vitor
+"> I think the change list in the description is totally wrong, but the diff looks good.
+
+yeah, that should only be a single commit. I'll investigate",Positive,Joao Vitor
+"> Sure, whatever you prefer. However for a free provider and initial experience I would go with fast and cheap. It’s not a downgrade as the model before did not work :)
+
+Fair enough; cheap is good, agreed!",Positive,Joao Vitor
+"my llm reluctantly suggests:
+
+#[cfg(windows)]
+{
+    paths.push(""%APPDATA%\\npm"".into());
+    paths.push(""%USERPROFILE%\\.local\\bin"".into());",Neutral,Manoel
+"great point, removed this",Positive,Manoel
+fixed,Neutral,Manoel
+"this is intentional, see https://github.com/block/goose/pull/5516#discussion_r2496176948",Neutral,Manoel
+"> does this work in basecamp2?
+
+If I set ALPHA=true, I still see the issue with and without this Pull Request",Negative,Manoel
+merged!,Neutral,Manoel
+Seems like we're still passing in all messages from the client + building/modifying all_messages below. Is that intentional?,Neutral,Manoel
+removed the `i` short and replaced with `id` alias,Neutral,Manoel
+Closing until https://github.com/block/goose/pull/5571 is merged in,Neutral,Manoel
+"> I am unable to use my recipe / sub-recipe setup since 1.10.x as the whole session management is not working. It wont create the necessary sessions, and it will not run without session. If sub-recipes would run without sessions my issue would be solved . I had them all setup with no-session. In general i think if you have a lot of sub-recipe/sub-agent runs, like in my case, the occasional hickup is not important if the overall success rate is still good. I have been adding additional logging to persist the errors i got so i can follow up, not needing the session details. Possibly others do similarly, when relying on subagents and sub recipes.
+
+Thanks for the feedback on sub-recipes @cbruyndoncx 
+
+Is there a separate issue for session <-> sub-recipe issues that describe it in more detail?",Neutral,Manoel
+"I'm sorry, since Hacktoberfest closed and this was still open without conflicts resolved, and the leaderboard is finalized, have to close without merging :c ",Negative,Manoel
+this is the actual change,Neutral,Manoel
+"**You have a DCO check failing. Here's[ how to fix](https://github.com/block/goose/pull/5503/checks?check_run_id=54198751428)**
+
+
+Suggested blog post with corrections. If you update to the below, we can approve and merge. 
+
+
+```
+# Managing goose Configurations Across Multiple Projects: A Practical Guide
+
+#goose #hacktoberfest #devops #productivity
+
+## Introduction
+Working with goose across multiple projects comes with challenges. One major issue is the time and effort it takes for teams to set up configurations: ""Wait, what provider did we use for this React app? Which LLM model for the Django server? Did you turn off auto-execute for this SECRET project?""
+
+Without a systematic structure, teams constantly ask these questions and fix inconsistencies. Fortunately, goose provides several tools to help manage configurations more effectively.
+
+## Understanding goose Configuration
+
+goose stores its global configuration in `~/.config/goose/config.yaml` and uses your system's keyring for sensitive information like API keys. You can set up your configuration interactively:
+
+```bash
+goose configure
+```
+
+This command walks you through provider setup, model selection, and extension configuration.
+
+## Environment Variable Overrides
+
+goose respects environment variables, allowing you to override settings per project or session:
+
+```bash
+export GOOSE_PROVIDER=""openai""
+export GOOSE_MODEL=""gpt-4o""
+export GOOSE_MODE=""auto""
+goose session
+```
+
+Common environment variables include:
+- `GOOSE_PROVIDER` - LLM provider selection
+- `GOOSE_MODEL` - Model selection  
+- `GOOSE_MODE` - Operation mode
+- `OPENAI_API_KEY` - OpenAI API key
+- `ANTHROPIC_API_KEY` - Anthropic API key
+
+## Project-Specific Configuration Strategies
+
+### 1. Environment Files
+Create project-specific environment files to standardize settings:
+
+```bash
+# project-a/.env.goose
+export GOOSE_PROVIDER=""openai""
+export GOOSE_MODEL=""gpt-4o-mini""
+export GOOSE_MODE=""auto""
+
+# Usage
+cd project-a
+source .env.goose
+goose session --name ""project-a-work""
+```
+
+### 2. Wrapper Scripts
+Create scripts that set up the environment and launch goose:
+
+```bash
+#!/bin/bash
+# scripts/goose-frontend.sh
+export GOOSE_PROVIDER=""openai""
+export GOOSE_MODEL=""gpt-4o""
+cd /path/to/frontend-project
+goose session --name ""frontend-work"" ""$@""
+```
+
+### 3. Session Management
+goose includes built-in session management that helps organize work by project:
+
+```bash
+# Create named sessions for different projects
+goose session --name ""frontend-auth-feature""
+goose session --name ""backend-api-refactor""
+
+# Resume previous sessions
+goose session --name ""frontend-auth-feature"" --resume
+```
+
+## Project Tracking Features
+
+goose automatically tracks your project directories:
+
+```bash
+# Resume your most recent project
+goose project
+
+# Browse and select from recent projects
+goose projects
+```
+
+This makes it easy to switch between different codebases while maintaining separate contexts.
+
+## Configuration Validation Script
+
+Here's a simple script to check your goose environment setup:
+
+```bash
+#!/bin/bash
+# validate-goose-setup.sh
+echo ""🔍 Checking goose setup...""
+
+# Check if goose is available
+if ! command -v goose &> /dev/null; then
+    echo ""❌ goose command not found""
+    exit 1
+fi
+
+echo ""✅ goose is installed""
+
+# Check environment variables
+ENV_VARS=(""GOOSE_PROVIDER"" ""GOOSE_MODEL"")
+for var in ""${ENV_VARS[@]}""; do
+    if [ -n ""${!var}"" ]; then
+        echo ""✅ $var = ${!var}""
+    else
+        echo ""ℹ️  $var not set (using global config)""
+    fi
+done
+
+# Check for API keys
+API_KEYS=(""OPENAI_API_KEY"" ""ANTHROPIC_API_KEY"")
+for key in ""${API_KEYS[@]}""; do
+    if [ -n ""${!key}"" ]; then
+        echo ""✅ $key is configured""
+    fi
+done
+
+echo ""✅ Setup check complete""
+```
+
+## Team Configuration Strategies
+
+### Small Teams
+- Share environment file templates in your repositories
+- Document required environment variables in README files
+- Use consistent naming for session names across the team
+
+### Medium Teams  
+- Create a shared repository of configuration scripts
+- Standardize on provider and model choices for consistency
+- Document configuration decisions and rationale
+
+### Large Organizations
+- Establish configuration standards and templates
+- Create onboarding documentation for goose setup
+- Consider centralized script distribution for common configurations
+
+## Troubleshooting Common Issues
+
+### Configuration Not Working
+```bash
+# Check current configuration
+goose info
+goose info --verbose
+
+# Reconfigure if needed
+goose configure
+```
+
+### Environment Variables Not Taking Effect
+```bash
+# Verify variables are set
+env | grep GOOSE
+env | grep API_KEY
+
+# Make sure to export variables
+export GOOSE_PROVIDER=""openai""  # Not just GOOSE_PROVIDER=""openai""
+```
+
+### Session Management Issues
+```bash
+# List available sessions to see what exists
+goose session list
+
+# Check project tracking
+goose projects
+```
+
+## Best Practices
+
+### Security
+- Store API keys in environment variables, not in code
+- Use goose's keyring integration via `goose configure`
+- Add environment files to `.gitignore`
+
+### Organization
+- Use descriptive session names that include project and feature context
+- Keep environment files in project roots for easy access
+- Document your configuration choices in project README files
+
+### Team Coordination
+- Establish team standards for provider and model selection
+- Share configuration templates and scripts
+- Document any project-specific requirements or constraints
+
+## Real-World Example
+
+Here's how you might organize configurations for a multi-project setup:
+
+```
+my-projects/
+├── frontend-app/
+│   ├── .env.goose
+│   └── README.md
+├── backend-api/
+│   ├── .env.goose  
+│   └── README.md
+└── scripts/
+    ├── goose-frontend.sh
+    ├── goose-backend.sh
+    └── validate-setup.sh
+```
+
+Each `.env.goose` file contains project-appropriate settings, and the scripts provide convenient ways to launch goose with the right configuration.
+
+## Conclusion
+
+Managing goose configurations across projects becomes much easier when you leverage environment variables, session management, and goose's built-in project tracking. Start with simple environment files and wrapper scripts, then build more sophisticated tooling as your team's needs grow.
+
+**Key Takeaways:**
+- Use `goose configure` for global setup
+- Override settings with environment variables per project
+- Leverage session names and project tracking for organization
+- Create simple scripts and templates to reduce setup friction
+- Document your configuration decisions for team consistency
+
+The goal is to reduce the cognitive overhead of switching between projects while maintaining the flexibility to use different providers, models, and settings as needed.
+```",Neutral,Manoel
+"I know we're all about reducing the logging but it does seem like logging the start/stop of each job execution would not be a bad idea.
+
+Or is it that we log it outside of this function?",Neutral,Manoel
+no need to check 2 lines for each file (or even inject two lines),Neutral,Manoel
+"> Getting a clippy error in `goose-mcp/src/computercontroller/mod.rs:1119` (unrelated to my changes). Should I fix it here or skip?
+
+@alexhancock ok.. do i create an issue for this or are you aware already? this could be created by running `cargo clippy --package goose-mcp -- -D warnings`",Negative,Manoel
+"can probably tell goose to drop the commentary, as it is just saying what is in the code (annoys me so much it does this, but I always have to tell it tp rip it out0",Negative,Manoel
+going back to the drawing board...,Positive,Manoel
+"> An interesting approach! But feels tough to me to include in the core goose implementation given how many tokens it could use... What would you think about a version which implements the core approach in a set of MCP tools with an optional server people could turn on?
+
+I did originally really want to make this a MCP with MCP-UI but I couldn’t find a reliable way to make calls to the different LLMs through a MCP… maybe I’m thinking about this architecture incorrectly, though as it’s new to me (happy to chat more on slack to get this to a better state). Because of voting and personas we have to spawn fresh conversations with the LLM providers, not just take the current chat and provide it as a tool call. 
+
+making it a MCP that could be toggled would be really ideal because I really wanted to have the ability to ask in chat what the best way to do something would be or to ask the council about something. The only reason I deviated from this was due to the above need of calling a LLM and goose core had that functionality built in where mcps don’t. 
+
+Because of the token use I did split it out of chat, which was a trade off I’d rather not make though ",Neutral,Manoel
+"> The only reason I deviated from this was due to the above need of calling a LLM and goose core had that functionality built in where mcps don’t.
+
+@simonsickle I implemented support for MCP [sampling](https://modelcontextprotocol.io/specification/2025-06-18/client/sampling) last week where the MCP server can use goose's model connection. It should just work if you emit `sampling/createMessage` requests from the server
+
+",Neutral,Manoel
+or change the path using @jamadeo 's new tricks,Positive,Manoel
+"yep, not needed, and not in right area.",Positive,Manoel
+"@blackgirlbytes I will revert back to Goose's most recent main branch, and I will create another branch from there and checkout the changes on the clean branch. Will probably have to open another Pull Request.",Neutral,Manoel
+"btw when i use goose, its breaking path of my nodejs installed with scoop.sh 
+its likely reinstalling nodejs after i run goose",Negative,Manoel
+could add (sqlite),Neutral,Manoel
+also `/usr/bin` or is that understood,Neutral,Manoel
+"this is clever but I don't think it is the solution. we shouldn't hard code block specific paths inside goose. but also, if I read the code correctly, if I have a recipe with subrecipes that resided on my local disk, we are still going to replace my subrecipes with anything that resolves against the github repository instead of my local sub recipe. ",Neutral,Manoel
+"""serialize the messages as-is"" is what I would do",Neutral,Manoel
+"yeah, good idea",Positive,Unaldo
+we should undo this; the llm logs are special and huge; keep only 10 of them and we send them out with the diagnostics,Neutral,Unaldo
+"Hi @Navadeep0007 , this was already addressed in #5460. thank you!",Positive,Unaldo
+"yeah that's fair! 
+
+the reason behind this was to have goose automatically backup the session DB before migrations are applied, and to have the ability to restore if necessary. I've opened 2 PRs (#5279 and #5419) recently that added DB migrations and ended up having a few issues locally when switching from `main` goose, my feature branch goose, and installed version of goose. I probably should have manually backed up before testing locally, but it would have been nice for goose to do it for me
+
+maybe this is over engineered and automated pre-migration backups are more trouble than they're worth. instead I direct this effort toward simplifying and improving my `goose-db-helper` script for my use case, and anything more complicated than that can be done manually with `sqlite3` CLI like you said. what do you think @alexhancock ?",Neutral,Unaldo
+delete,Negative,Unaldo
+"yes. let me delete it for real. the session config has a working directory and a session id which maps to a session which also has a working dir. they were the same in practice, but we should only have one source of truth",Neutral,Unaldo
+"I understand @taniandjerry . We actually moved it to another Pull Request for this one, and that one successfully merged. Sorry for the troubles, I got confused with my previous git sign ammends in this branch.",Negative,Unaldo
+"nice, I saw we didn't use this. There's some code on the frontend you could clean up with this too",Positive,Unaldo
+"I was going to say why isn't this a method on the scheduler, but I see it's because we are calling it in the job tasks where we only give it a pointer to the internal map
+
+I probably would have one this where the job tasks write to a channel and the scheduler just has one task that saves whenever updates come through, that feels a bit safer and cleaner, but this is already a big refactor. Maybe for another time.",Neutral,Unaldo
+"we actually have two setup_logging methods, one for the server and one for the cli. the get_log_directory is shared though. I think the right move would be to either just have one and use the name here (don't put it in a server or cli folder, just have a server.log, cli.log and an mcp.log) but that's a rather bigger refactor. or we can just rename this function to prepare_log_directory that also does the clean up? definitely need to set up the log rotation also for the cli though",Neutral,Unaldo
+"thank you @ecki , could you do the DCO thing and then we'll merge?",Positive,Unaldo
+"serial doesn't protect you; it just means that this test will run serial with all the other serial tests. we're changing the current directory here, so that will make other tests flaky. do we need to change the current directory?",Neutral,Unaldo
+@blackgirlbytes have made a clean branch and pushed the content on there. Do we close without merge for this thread?,Neutral,Unaldo
+Thanks @aharvard !,Positive,Unaldo
+is this actually here for testing? it does seem weird to just do nothing if the job.source is empty,Negative,Unaldo
+aha! that's the way,Positive,Unaldo
+"if the explanation is unique ID for the job, then it should be job-id , as a schedule implies a series of job In My Humble Opinion, or is it really a session-id ?",Neutral,Unaldo
+"I think the change list in the description is totally wrong, but the diff looks good.",Positive,Unaldo
+"@angiejones ah yeah, was playing around with putting the info into the collapsible one but have to think about it some more 😓 I'm mostly confused why this specific extension always throws two individual ones to begin with ",Negative,Unaldo
+"""this extension"" is consistent with other steps and doesn't need specific context. It's also better grammatically.",Positive,Unaldo
+issue #5288,Neutral,Unaldo
+Should this also be in the settings table?,Neutral,Unaldo
+"after manual compaction, should this not really just go to zero? have we sent the manually compacted conversation to the model yet or only to the client? although I could see how that would be confusing to a user
+
+it would be good to avoid a hard coded system prompt estimate, just because that could really be all over the place
+
+I suppose we could do something like use the token counts from the first message you send, but that would be complicated to do",Neutral,Unaldo
+"I don't think we should do this in reply_internal - that one is big enough as is. instead add this functionality to the prompt-manager itself and then add it to the call to the prompt manager:
+
+        let prompt_manager = self.prompt_manager.lock().await;
+        let system_prompt = prompt_manager
+            .builder(model_name)
+            .with_extensions(extensions_info.into_iter())
+            .with_frontend_instructions(self.frontend_instructions.lock().await.clone())
+            .with_extension_and_tool_counts(extension_count, tool_count)
+            .build();
+",Neutral,Unaldo
+"will it be annoying for your workflow at all @blackgirlbytes & co?
+
+was just doing this to simplify after reviewing https://github.com/block/goose/pull/5453",Positive,Unaldo
+"> thank you @ecki , could you do the DCO thing and then we'll merge?
+
+Ok, should be good to go now.",Positive,Unaldo
+"```suggestion
+goose operates autonomously by default. Combined with the Developer extension's tools, this means goose can execute commands and modify files without your approval. If you want more control over this behavior, you can configure the [goose permission mode](/docs/guides/goose-permissions), [tool permissions](/docs/guides/managing-tools/tool-permissions), and [.gooseignore files](/docs/guides/using-gooseignore). See [Configuring Access Controls](/docs/mcp/developer-mcp#configuring-access-controls) for a brief overview.
+```",Neutral,Unaldo
+I've addressed all the Copilot AI suggestions from the recent code review. Happy to address any feedback.,Positive,Unaldo
+Fantastic!,Positive,Pedro Soares
+macports uses: /opt/local/bin,Neutral,Pedro Soares
+@alexhancock sounds good! just to clarify - the [script](https://github.com/block/goose/blob/main/scripts/goose-db-helper.sh) already exists and this was my attempt at replacing it by building the functionality into goose,Positive,Pedro Soares
+Unclear that we want to do this this way - closing out for now,Negative,Pedro Soares
+Closing this Pull Request as the same change is already covered in [#5468](https://github.com/block/goose/pull/5468),Neutral,Pedro Soares
+linked topic provides more detailed info,Neutral,Pedro Soares
+fwiw this is all gone in basecamp2,Negative,Pedro Soares
+I guess this should say the actual path,Neutral,Pedro Soares
+enumerated file extensions because of the diff between cli/desktop support for `.yml`,Neutral,Pedro Soares
+id' would be slightly longer but just feels a lot more clear.,Neutral,Pedro Soares
+"If it's all going away soon, I wouldn't bother tracking it all down if this gets it working",Neutral,Pedro Soares
+"@DOsinga Addressed all feedback. Reaping now works the same way for all three of  `cli, server, llm` using a unified `prepare_log_directory` which also does cleanup. File structure now looks like:
+
+```
+13:38:55 ~/.local/state/goose $ tree logs
+logs
+├── cli
+│   └── 2025-11-04
+│       ├── 20251104_132253.log
+│       └── 20251104_132300.log
+├── llm
+│   └── 2025-11-04
+│       ├── llm_request.0.jsonl
+│       ├── llm_request.1.jsonl
+│       ├── llm_request.2.jsonl
+│       └── llm_request.3.jsonl
+└── server
+    └── 2025-11-04
+        ├── 20251104_133833-goosed.log
+        └── 20251104_133844-mcp-developer.log
+```
+
+The content of the llm ones is a little different in the `.jsonl` format so I left the files themselves alone for that, but made the directory structure nicer.",Neutral,Pedro Soares
+"@wpfleger96 yes, i think something like an external script which has goose specific migration utils could be good for powerusers. and then standard sqlite3 cli for anything where user wants to take full control.
+
+so good to close this out then and make a new Pull Request with a script if needed?",Neutral,Pedro Soares
+"looking through the code it seems like this param refers to the unique ID of a recurring scheduled job, not a single execution/job instance. so the help string is misleading 😓 ",Negative,Pedro Soares
+This event was turned off deliberately for security reason,Negative,Pedro Soares
+"Yes, good point! I'll add to the table.",Positive,Pedro Soares
+"can recipes be .jsonl files? also do we need this check, can we not always call serde_yaml?",Neutral,Pedro Soares
+fixes #5491 (hopefully),Neutral,Pedro Soares
+"@angiejones I think this looks better! Kept the same logic with either ""Ask Goose"" button or copy error.
+
+<img width=""600"" height=""888"" alt=""image"" src=""https://github.com/user-attachments/assets/194d2377-f75e-45ee-aaec-e9dfc226534a"" />
+",Positive,Pedro Soares
+Still seems to be failing with pro; should we just drop/modify that specific test condition?,Negative,Pedro Soares
+"pre existing, but I think we can now just let the error bubble up",Neutral,Pedro Soares
+seems like ScheduledJob.source should be a PathBuf not a String,Negative,Pedro Soares
+why are we creating this directory? we're just reading from it?,Neutral,Pedro Soares
+"appdata/npm is covered in the with_npm bit. For home/.local/bin, yeah that can just be pulled out of the if cfg(unix) arm since shellexpand will do the right thing on windows",Neutral,Pedro Soares
+"I actually don't think this is the fix for the reported issue; that was talking about how web hammers the database. if you do a web session and then open that web session in goose, you can clearly see what happens. web writes streaming messages in one by one and then agent writes the resulting message. so the fix is really simple:
+
+https://github.com/block/goose/pull/5601",Negative,Pedro Soares
+"I don't think this needs to own `job`
+
+`create_cron_task(&self, job: &ScheduledJob)`
+",Neutral,Pedro Soares
+.bundle,Neutral,Pedro Soares
+"Closing Pull Request based on discord conversation - https://discord.com/channels/1287729918100246654/1433094595951988806/1433454663369490533
+
+Conclusion: this Pull Request was submitted without an assigned issue, and without first asking. Closing because it is unfair to other contributors.",Negative,Pedro Soares
+I agree w makes more sense. Maybe we go w and p to keep this the same?,,Vitor de Lima
+Replacing this with https://github.com/block/goose/pull/5588 which also makes `ToolCallLocations` work with line numbers and file names for the developer extension tools,,Vitor de Lima
+"Hi @vietbui1999ru ! 
+
+> I don't know how to fix that, and I hope it didn't affect anything.
+
+No need to worry - it didn't affect anything for us. In this situation, given your changes only included changes to a documentation file which likely wouldn't have conflicts with other changes, I would recommend making a new branch from main and then cherry-picking your original commit on top of main
+
+```
+git checkout main
+git fetch origin
+git reset --hard origin/main
+git co -b NEW_BRANCH_NAME
+git cherry-pick 2e152abbdb95620452169cf53bcbe9c45a4719c0
+git commit -am COMMIT_MESSAGE
+```
+
+Then make a new Pull Request
+
+Reading https://docs.github.com/en/get-started/using-github/github-flow may also help provide some guidance on how to work with branches, pull in updates from others, and collaborate on a git project!",,Vitor de Lima
+"Yeah I think this one is more of a question of what we want to show the user. Let's try dropping it to the summary size, there will be a bit of whiplash for the user when the system prompt re-enters on the next message, but I don't love that constant either.",,Vitor de Lima
+"eh, what? that's exactly how it is supposed to work",,Vitor de Lima
+I think this is n/a because it's consistent with the other required fields (no fallback) and this Pull Request updates all existing consumers of this component.,,Vitor de Lima
+I think it would be great if we can turn this indeed into an MCP server and use the new sampling! going to close this for now,,Vitor de Lima
+Probably not important to add this since we hopefully won't keep this around for too much longer.,,Vitor de Lima
+This is my previous Pull Request before noticing a merge conflict @taniandjerry. I have attempted to fix the tags being incorrect from my end and also attempted to push the most recent code changes.,,Vitor de Lima
+Thanks. When will this fix be available in the application?  @psilvis,,Vitor de Lima
+and also here,,Vitor de Lima
+@sheikhlimon we'll deal with the other computercontroller thing,,Vitor de Lima
+on mac/desktop PATH is `/usr/bin:/bin:/usr/sbin:/sbin` (started via launchctl) so I think it's safe to assume that will always be there. I'm not entirely sure of the situation on linux but it's probably also in the system path?,,Vitor de Lima
+"I don't think this works - we were previously doing our own timestamping, so this is just going to produce log files of the form:
+
+20251104_143052.log.2025-11-04
+
+so we can use the rotation, but then just get rid of the old timestamp code or just leave it as is",,Vitor de Lima
+Done. Messages now should serialize as-is,,Vitor de Lima
+"is that a reaction to the fact that we export any secret that starts with AWS_ to the environment? because, yeah...",,Vitor de Lima
+"`gemini-2.5-flash` failed the mcp test in this one. will get less flaky now that we have merged https://github.com/block/goose/pull/5574
+
+merging this one ",,Vitor de Lima
+I think it solves this #4365 one too... i was working on this then saw new requirements.. so I put it on hold..,,Vitor de Lima
+i had a 2 for 1 for another extension too. there were two different messages on them,,Vitor de Lima
+"Im not convinced sessionOutputTokens is working right; I think that's the reason we were seeing this issue. The stream seems like a reasonable place to do this (although I suspect that might be used for session load because the stream code path is not hit there). 
+
+Also really don't know why we have token estimates in the client.
+
+Will take a deeper pass and try to clean shop here. ",,Vitor de Lima
+is this supposed to be deleted?,,Vitor de Lima
+Acknowledge will take another pass on the frontend too.,,Vitor de Lima
+"thank you so much for this fix! can you sign the [DCO](https://github.com/block/goose/pull/5530/checks?check_run_id=54304673741):
+
+```
+git commit --amend --no-edit --signoff
+git push -f origin fix-gemini-api-parsing-issue
+```",,Vitor de Lima
